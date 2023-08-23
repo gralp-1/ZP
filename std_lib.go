@@ -41,12 +41,12 @@ func del(self *Interpreter, inps []string) {
 }
 func stdLib() map[string]Func {
 	lib := map[string]Func{}
-	register(lib, store, 2)
-	register(lib, add, 3)
-	register(lib, del, 1)
-	register(lib, exists, 1)
-	register(lib, printVar, 1)
-	register(lib, printVal, 1)
+	Register(lib, store, 2)
+	Register(lib, add, 3)
+	Register(lib, del, 1)
+	Register(lib, exists, 1)
+	Register(lib, printVar, 1)
+	Register(lib, printVal, 1)
 
 	return lib
 }

@@ -1,8 +1,8 @@
 # ZP
 
 ## TODO:
- - Add more standard library functions:
-    - More maths stuff
+ - [ ] Add more standard library functions:
+    - [ ] More maths stuff
  - [ ] Loops
  - [ ] Functions
  - [ ] Importation

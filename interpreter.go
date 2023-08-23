@@ -30,13 +30,13 @@ func NewInterpreter(content string) *Interpreter {
 func (self *Interpreter) GetVariable(identifier string) string {
 	val, ok := self.vars[identifier]
 	if !ok {
-		fmt.Fprintf(os.Stderr,"Tried to access non-existant variable %s on line %d\n", identifier, self.line_number)
+		fmt.Fprintf(os.Stderr, "Tried to access non-existant variable %s on line %d\n", identifier, self.line_number)
 		os.Exit(1)
 	}
 	return val
 }
 func (self *Interpreter) InitStdLib() *Interpreter {
-	self.funcs = std_lib()
+	self.funcs = stdLib()
 	return self
 }
 func (self *Interpreter) Interpret() {

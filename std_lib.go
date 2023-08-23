@@ -3,17 +3,8 @@ package main
 import (
 	"fmt"
 	"os"
-	"reflect"
-	"runtime"
 	"strconv"
-	"strings"
 )
-
-func GetFnName(i interface{}) string {
-	full_name := runtime.FuncForPC(reflect.ValueOf(i).Pointer()).Name()
-	fn_name := strings.Split(full_name, ".")[1]
-	return fn_name
-}
 
 func add(self *Interpreter, inps []string) {
 	int_a, err_a := strconv.Atoi(self.GetVariable(inps[1]))
@@ -38,27 +29,24 @@ func exists(self *Interpreter, inps []string) {
 func store(self *Interpreter, inps []string) {
 	self.vars[inps[0]] = inps[1]
 }
-func print_val(self *Interpreter, inps []string) {
+func printVal(self *Interpreter, inps []string) {
 	fmt.Printf("%s\n", inps[0])
 }
-func print_var(self *Interpreter, inps []string) {
+func printVar(self *Interpreter, inps []string) {
 
 	fmt.Printf("%s\n", self.GetVariable(inps[0]))
 }
 func del(self *Interpreter, inps []string) {
 	delete(self.vars, inps[0])
 }
-func register(lib map[string]Func, function func(*Interpreter, []string), argc int) {
-	lib[GetFnName(function)] = Func{funct: function, argc: argc}
-}
-func std_lib() map[string]Func {
+func stdLib() map[string]Func {
 	lib := map[string]Func{}
 	register(lib, store, 2)
 	register(lib, add, 3)
 	register(lib, del, 1)
 	register(lib, exists, 1)
-	register(lib, print_var, 1)
-	register(lib, print_val, 1)
+	register(lib, printVar, 1)
+	register(lib, printVal, 1)
 
 	return lib
 }

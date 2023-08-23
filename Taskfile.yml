@@ -2,8 +2,9 @@ version: "3"
 tasks:
   build:
     cmds:
-      - go build .
+      - go build -o zp
+      - mv ./zp ./bin
   run:
     deps: [build]
     cmds:
-      - ./test-lang example.zp
+      - ./bin/zp example.zp

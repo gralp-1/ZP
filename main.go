@@ -8,23 +8,21 @@ import (
 func main() {
 	filename := "./example.zp"
 	// check if file exists
-	// check if file is .pb
+	// check if file is .zp
 
 	_, err := os.Stat(filename)
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "File %s doesn't exist\n", filename)
-		os.Exit(1)
+		Fatal(fmt.Sprintf("File %s doesn't exist\n", filename))
 	}
 	if string(filename[len(filename)-3:]) != ".zp" {
-		fmt.Fprintf(os.Stderr, "File %s is not a .zp file\n", filename)
-		os.Exit(1)
+		Fatal(fmt.Sprintf("File %s is not a .zp file\n", filename))
 	}
 	f_contents, err := os.ReadFile(filename)
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "File %s could not be read\n", filename)
-		os.Exit(1)
+		Fatal(fmt.Sprintf("File %s could not be read\n", filename))
 	}
-	Interpreter := NewInterpreter(string(f_contents)).InitStdLib()
+	Preprocessor := NewPreprocessor(string(f_contents))
+	processed := Preprocessor.Preprocess()
+	Interpreter := NewInterpreter(processed).AddLibrary(StdLib())
 	Interpreter.Interpret()
-	// check if file is .zp
 }

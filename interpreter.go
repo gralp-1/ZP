@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"maps"
 	"os"
 	"strings"
 )
@@ -14,11 +15,11 @@ type Func struct {
 type Interpreter struct {
 	funcs       map[string]Func
 	vars        map[string]string
-	content     string
+	content     []string
 	line_number int
 }
 
-func NewInterpreter(content string) *Interpreter {
+func NewInterpreter(content []string) *Interpreter {
 	return &Interpreter{
 		funcs:       map[string]Func{},
 		vars:        map[string]string{},
@@ -30,33 +31,27 @@ func NewInterpreter(content string) *Interpreter {
 func (self *Interpreter) GetVariable(identifier string) string {
 	val, ok := self.vars[identifier]
 	if !ok {
-		fmt.Fprintf(os.Stderr, "Tried to access non-existant variable %s on line %d\n", identifier, self.line_number)
-		os.Exit(1)
+		Fatal(fmt.Sprintf("Tried to access non-existant variable %s on line %d\n", identifier, self.line_number))
 	}
 	return val
 }
-func (self *Interpreter) InitStdLib() *Interpreter {
-	self.funcs = stdLib()
+func (self *Interpreter) SetVariable(identifier string, val string) {
+	// check that the identifier is acceptable
+	self.vars[identifier] = val
+}
+func (self *Interpreter) AddLibrary(library map[string]Func) *Interpreter {
+	maps.Copy(self.funcs, library)
 	return self
 }
 func (self *Interpreter) Interpret() {
-	// start processing the file
-	lines := strings.Split(self.content, ";")
-	for idx, line := range lines {
-		line = strings.Trim(line, "\n")
+	for idx, line := range self.content {
 		// check for comments
-		if strings.HasPrefix(line, "//") || len(line) == 0 {
-			continue
-		}
 		self.line_number = idx + 1
-		line = strings.TrimSpace(line)
-		line = strings.ReplaceAll(line, "\n", "")
 		parts := strings.Split(line, " ")
 		function := self.funcs[parts[0]]
 		args := parts[1:]
-		fmt.Printf("Running %s\n", line)
 		if len(args) != function.argc {
-			fmt.Fprintf(os.Stderr, "Error: expected %d arguments on line %d\n", function.argc, self.line_number)
+			Fatal(fmt.Sprintf("(%s interpreter %s) expected %d arguments on line %d", "", GetFnName(function.funct), function.argc, self.line_number))
 			os.Exit(1)
 		}
 		function.funct(self, parts[1:])

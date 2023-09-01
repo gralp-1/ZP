@@ -3,7 +3,6 @@ tasks:
   build:
     cmds:
       - go build -o zp
-      - mv ./zp ./bin
   run:
     deps: [build]
     cmds:

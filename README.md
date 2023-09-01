@@ -4,9 +4,11 @@
  - [ ] Add more standard library functions:
     - [ ] More maths stuff
  - [ ] Loops
+ - [ ] Codegen
  - [ ] Functions
- - [ ] Importation
- - [ ] Preprocessor
+ - [x] Preprocessor
+ - [ ] Preproc directives
+ - [ ] Logger
  - [ ] Command line options (print level, etc)
 
 
@@ -19,3 +21,5 @@ store <var> <val> // var = val
 exists <var> // check if variable exists
 del <var> // exiplicitly delete <var>
 ```
+Features:
+ - Supports scientific notation
